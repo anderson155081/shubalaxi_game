@@ -58,12 +58,12 @@
      width: 100%;
      height: 80px;
      position: relative;
-     cursor: pointer;
+   
      overflow: hidden;
  }
 
  .hole::before{
-    background: url('hole.svg') no-repeat center bottom;
+    background: url('hole.png') no-repeat center bottom;
     background-size: contain;
     content: '';
     width: 100%;
@@ -81,6 +81,7 @@
     bottom: -40px;
     left: 18px;
     display: none;
+    cursor: url(hit.png),pointer;
     transition: transform 0.3s ease;
     z-index: 2;
  }
@@ -88,15 +89,20 @@
 
  body{
     overflow: hidden;
+    cursor: url(hit.png), auto;
+
  }
 
 .hamster_game_box{
+    position: relative;
     height: 100vh;
     max-width: 500px;
     width: 100%;
     padding-top: 10vh;
-    background: linear-gradient(141.64deg, #FFE2B9 3.57%, #FFC8BA 27.25%, #FFC9A0 40.08%, #FFE5BA 52.91%);
+    background: url(cloud.png), linear-gradient(141.64deg, #FFE2B9 3.57%, #FFC8BA 27.25%, #FFC9A0 40.08%, #FFE5BA 52.91%)  center top no-repeat;
+    background-size: cover;
 }
+
  .title{
     width: 320px;
     height: auto;
@@ -123,16 +129,20 @@
         width: 75vw;
     }
     #game-container{
-        grid-template-columns: repeat(3, 80px);
+        grid-template-columns: repeat(3, 90px);
     }
     .hamster {
         width: 50px;
         height: 50px;
         bottom: -30px;
-        left: 13px;
+        left: 18px;
     }
     .hole::before{
         bottom: -1.5px;
+    }
+
+    .game_area{
+        height: calc(90vh - 103px + 100px);
     }
 }
 button{
@@ -147,6 +157,7 @@ button{
     margin: 10px auto;
     color: #FFF;
     letter-spacing: 0.08rem;
+    cursor: url(hit.png), pointer;
 }
 
 
