@@ -117,6 +117,22 @@
             }
         }
 
+                // 定义鼠标切换后的图片路径
+        const defaultCursor = "url('hit.png') 16 16, auto";
+        const clickedCursor = "url('hit2.png') 16 16, auto";
+
+        // 监听整个文档的点击事件
+        document.addEventListener('click', () => {
+            // 更改鼠标指针图片
+            document.body.style.cursor = clickedCursor;
+
+            // 在 500 毫秒后恢复初始鼠标图片
+            setTimeout(() => {
+                document.body.style.cursor = defaultCursor;
+            }, 100);
+        });
+
+
 
         function randomTime(min, max) {
             return Math.round(Math.random() * (max - min) + min);
@@ -184,6 +200,7 @@
         function pauseGame() {
             isPaused = !isPaused;
             pauseButton.textContent = isPaused ? "繼續遊戲" : "暫停遊戲";
+           
         }
 
         function endGame() {
@@ -192,7 +209,7 @@
             finalScoreDisplay.textContent = score;
             endGameDisplay.style.display = 'block';
             startButton.style.display = 'none';
-            pauseButton.disabled = true;
+            pauseButton.style.display = 'none';
             restartButton.style.display = 'block';
         }
 

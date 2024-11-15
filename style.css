@@ -86,10 +86,13 @@
     z-index: 2;
  }
 
+ /* .hamster:active{
+    cursor: url(hit2.png),pointer;
+ } */
 
  body{
     overflow: hidden;
-    cursor: url(hit.png), auto;
+    cursor: url(hit.png), pointer;
 
  }
 
@@ -157,7 +160,9 @@ button{
     margin: 10px auto;
     color: #FFF;
     letter-spacing: 0.08rem;
-    cursor: url(hit.png), pointer;
+    cursor:url('hit.png'),pointer;
 }
 
-
+button:active{
+    cursor:url('hit2.png'),pointer;
+}
