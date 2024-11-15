@@ -57,14 +57,14 @@
  }
 
  .hole::before{
-    background: url('hole.png') no-repeat center bottom;
+    background: url('hole.svg') no-repeat center bottom;
     background-size: contain;
     content: '';
     width: 100%;
-    height: 40px;
+    height: 36px;
     display: block;
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     bottom: -2px;
  }
  .hamster {
@@ -75,7 +75,7 @@
     left: 18px;
     display: none;
     transition: transform 0.3s ease;
-    z-index: 1;
+    z-index: 2;
  }
 
 

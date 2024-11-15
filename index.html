@@ -143,9 +143,9 @@
             // 點擊事件
             hamster.addEventListener('click', () => {
                 if (hamsterType === 'angel') {
-                    score -= 2;
+                    score -= 1;
                 } else {
-                    score += 1;
+                    score += 10;
                 }
                 scoreDisplay.textContent = score;
                 hamster.remove();
@@ -155,7 +155,7 @@
                 hamster.style.transform = 'translateY(-80%)';
                 setTimeout(() => {
                     hamster.remove();
-                }, 800);
+                }, 1000);
             }, randomTime(1200, 2000));
         }
 
