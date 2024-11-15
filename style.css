@@ -52,7 +52,7 @@
      grid-template-columns: repeat(3, 100px);
      grid-gap: 20px;
      justify-content: center;
-     margin: 0 auto;
+     margin: 16px auto;
  }
  .hole {
      width: 100%;
@@ -93,10 +93,28 @@
  body{
     overflow: hidden;
     cursor: url(hit.png), pointer;
+    background: url(bg.png) center bottom / cover no-repeat;
+    backdrop-filter: blur(11px);
 
+ }
+.text_box_outer{
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 10px;
+}
+ p.text_box{
+    padding: 8px 12px;
+    border-radius: 100px;
+    background-color: #c9786b;
+    border: 4px solid #FFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width: fit-content;
+    color: #FFF;
  }
 
 .hamster_game_box{
+    margin: 0 auto;
     position: relative;
     height: 100vh;
     max-width: 500px;

@@ -27,9 +27,10 @@
        <img src="title.png" alt="打地鼠遊戲" class="title">
 
         <div class="game_area">
-            <p>時間剩餘：<span id="timer">30</span> 秒</p>
-            <p>分數：<span id="score">0</span></p>
-
+            <div class="text_box_outer">
+                <p class="text_box">時間剩餘：<span id="timer">30</span> 秒</p>
+                <p class="text_box">分數：<span id="score">0</span></p>
+            </div>
             <!-- 遊戲區域和控制按鈕 -->
             <div id="game-container">
                 <!-- 9個洞口 -->
@@ -80,6 +81,19 @@
 
         const leaderboardData = [];  // 宣告排行榜數據
 
+        const defaultCursor = "url('hit.png') , auto";
+        const clickedCursor = "url('hit2.png') , auto";
+
+        // 监听整个文档的点击事件
+        document.addEventListener('click', () => {
+            // 更改鼠标指针图片
+            document.body.style.cursor = clickedCursor;
+
+            // 在 500 毫秒后恢复初始鼠标图片
+            setTimeout(() => {
+                document.body.style.cursor = defaultCursor;
+            }, 100);
+        });
         // 顯示或隱藏排行榜視窗
         function toggleLeaderboard() {
             const leaderboard = document.getElementById('leaderboard');
@@ -117,20 +131,7 @@
             }
         }
 
-                // 定义鼠标切换后的图片路径
-        const defaultCursor = "url('hit.png') 16 16, auto";
-        const clickedCursor = "url('hit2.png') 16 16, auto";
-
-        // 监听整个文档的点击事件
-        document.addEventListener('click', () => {
-            // 更改鼠标指针图片
-            document.body.style.cursor = clickedCursor;
-
-            // 在 500 毫秒后恢复初始鼠标图片
-            setTimeout(() => {
-                document.body.style.cursor = defaultCursor;
-            }, 100);
-        });
+        
 
 
 
@@ -159,7 +160,7 @@
             // 點擊事件
             hamster.addEventListener('click', () => {
                 if (hamsterType === 'angel') {
-                    score -= 1;
+                    score -= 10;
                 } else {
                     score += 10;
                 }
@@ -171,7 +172,7 @@
                 hamster.style.transform = 'translateY(-80%)';
                 setTimeout(() => {
                     hamster.remove();
-                }, 800);
+                }, 1000);
             }, randomTime(1500, 2000));
         }
 
@@ -184,7 +185,7 @@
             endGameDisplay.style.display = 'none';
             startButton.style.display = 'none';
             pauseButton.disabled = false;
-            restartButton.style.display = 'none';
+            restartButton.style.display = 'block';
 
             timer = setInterval(() => {
                 if (!isPaused) {
@@ -214,9 +215,30 @@
         }
 
         function restartGame() {
+             // 清除舊的計時器和循環
+            clearInterval(timer);
+            clearInterval(gameInterval);
+
+            // 重置遊戲狀態
+            score = 0;
+            timeLeft = 30;
+            isPaused = false;
+
+            // 更新顯示的分數和時間
+            scoreDisplay.textContent = score;
+            timerDisplay.textContent = timeLeft;
+
+            // 隱藏結束畫面
             endGameDisplay.style.display = 'none';
-            const submitButton = document.querySelector('#end-game button');
-            submitButton.disabled = false;  // 重新啟用提交按鈕
+
+            // 確保按鈕狀態正確
+            startButton.style.display = 'none';
+            pauseButton.disabled = false;
+            pauseButton.textContent = "暫停遊戲";
+            pauseButton.style.display = 'block';
+            restartButton.style.display = 'none';
+
+            // 啟動新遊戲
             startGame();
         }
 
