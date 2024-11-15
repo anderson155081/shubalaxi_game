@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打地鼠遊戲</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reset.css">
+
+</head>
+
+<body>
+    <div class="hamster_game_box">
+        <!-- 排行榜按鈕 -->
+        <button id="leaderboard-button" onclick="toggleLeaderboard()">排行榜</button>
+
+        <!-- 排行榜彈出視窗 -->
+        <div id="leaderboard">
+            <h2>排行榜</h2>
+            <ul id="leaderboard-list">
+                <!-- 排行榜項目會動態插入 -->
+            </ul>
+            <button id="close-leaderboard" onclick="toggleLeaderboard()">關閉</button>
+        </div>
+
+       <img src="title.png" alt="打地鼠遊戲" class="title">
+
+        <div class="game_area">
+            <p>時間剩餘：<span id="timer">30</span> 秒</p>
+            <p>分數：<span id="score">0</span></p>
+
+            <!-- 遊戲區域和控制按鈕 -->
+            <div id="game-container">
+                <!-- 9個洞口 -->
+                <div class="hole" data-index="1">
+                    <div class="area_setting"></div>
+                </div>
+                <div class="hole" data-index="2"><div class="area_setting"></div></div>
+                <div class="hole" data-index="3"><div class="area_setting"></div></div>
+                <div class="hole" data-index="4"><div class="area_setting"></div></div>
+                <div class="hole" data-index="5"><div class="area_setting"></div></div>
+                <div class="hole" data-index="6"><div class="area_setting"></div></div>
+                <div class="hole" data-index="7"><div class="area_setting"></div></div>
+                <div class="hole" data-index="8"><div class="area_setting"></div></div>
+                <div class="hole" data-index="9"><div class="area_setting"></div></div>
+            </div>
+
+            <div id="controls">
+                <button id="start-button" onclick="startGame()">開始遊戲</button>
+                <button id="pause-button" onclick="pauseGame()" disabled>暫停遊戲</button>
+                <button id="restart-button" onclick="restartGame()" style="display: none;">重新開始</button>
+            </div>
+
+            <div id="end-game">
+                <h2>遊戲結束！</h2>
+                <p>你的分數是：<span id="final-score"></span></p>
+                <label for="username">輸入名字上排行榜：</label>
+                <input type="text" id="username" placeholder="你的名字">
+                <button onclick="submitScore()">提交</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        let score = 0; //記錄分數
+        let timeLeft = 30; //倒數計時器 從30秒開始
+        let timer; //控制計時與循環的變數
+        let gameInterval; //控制計時與循環的變數
+        let isPaused = false; //控制遊戲暫停
+
+        const holes = document.querySelectorAll('.hole');
+       
+        const timerDisplay = document.getElementById('timer');
+        const scoreDisplay = document.getElementById('score');
+        const endGameDisplay = document.getElementById('end-game');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const startButton = document.getElementById('start-button');
+        const pauseButton = document.getElementById('pause-button');
+        const restartButton = document.getElementById('restart-button');
+
+        const leaderboardData = [];  // 宣告排行榜數據
+
+        // 顯示或隱藏排行榜視窗
+        function toggleLeaderboard() {
+            const leaderboard = document.getElementById('leaderboard');
+            leaderboard.style.display = leaderboard.style.display === 'none' ? 'block' : 'none';
+            if (leaderboard.style.display === 'block') updateLeaderboard();
+        }
+
+        // 更新排行榜內容
+        function updateLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            leaderboardList.innerHTML = ''; // 清空排行榜內容
+
+            // 排序得分，顯示前5名
+            leaderboardData.sort((a, b) => b.score - a.score);
+            leaderboardData.slice(0, 5).forEach((entry, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${index + 1}. ${entry.name} - ${entry.score} 分`;
+                leaderboardList.appendChild(li);
+            });
+        }
+
+        // 遊戲結束後提交分數
+        function submitScore() {
+            const username = document.getElementById('username').value;
+            const submitButton = document.querySelector('#end-game button');
+
+            if (username) {
+                leaderboardData.push({ name: username, score: score });
+                alert(`已提交分數！玩家：${username}，分數：${score}`);
+
+                // 禁用提交按鈕，防止重複提交
+                submitButton.disabled = true;
+
+                toggleLeaderboard();  // 顯示排行榜
+            }
+        }
+
+
+        function randomTime(min, max) {
+            return Math.round(Math.random() * (max - min) + min);
+        }
+
+        function randomHole() {
+            const index = Math.floor(Math.random() * holes.length);
+            return holes[index];
+        }
+
+        function showHamster() {
+            if (isPaused) return; // 如果遊戲暫停，則不顯示倉鼠
+
+            const hole = randomHole();
+           
+            const hamsterType = Math.random() < 0.5 ? 'angel' : 'devil';
+            const hamster = document.createElement('img');
+
+            hamster.src = hamsterType === 'angel' ? 'pinky.png' : 'chuchi.png';
+            hamster.classList.add('hamster', hamsterType);
+            hamster.style.display = 'block';
+            hole.appendChild(hamster);
+
+            // 點擊事件
+            hamster.addEventListener('click', () => {
+                if (hamsterType === 'angel') {
+                    score -= 2;
+                } else {
+                    score += 1;
+                }
+                scoreDisplay.textContent = score;
+                hamster.remove();
+            });
+
+            setTimeout(() => {
+                hamster.style.transform = 'translateY(-80%)';
+                setTimeout(() => {
+                    hamster.remove();
+                }, 800);
+            }, randomTime(1200, 2000));
+        }
+
+        function startGame() {
+            isPaused = false;
+            score = 0;
+            timeLeft = 30;
+            scoreDisplay.textContent = score;
+            timerDisplay.textContent = timeLeft;
+            endGameDisplay.style.display = 'none';
+            startButton.style.display = 'none';
+            pauseButton.disabled = false;
+            restartButton.style.display = 'none';
+
+            timer = setInterval(() => {
+                if (!isPaused) {
+                    timeLeft--;
+                    timerDisplay.textContent = timeLeft;
+                    if (timeLeft <= 0) endGame();
+                }
+            }, 1000);
+
+            gameInterval = setInterval(showHamster, 600);
+        }
+
+        function pauseGame() {
+            isPaused = !isPaused;
+            pauseButton.textContent = isPaused ? "繼續遊戲" : "暫停遊戲";
+        }
+
+        function endGame() {
+            clearInterval(timer);
+            clearInterval(gameInterval);
+            finalScoreDisplay.textContent = score;
+            endGameDisplay.style.display = 'block';
+            startButton.style.display = 'none';
+            pauseButton.disabled = true;
+            restartButton.style.display = 'block';
+        }
+
+        function restartGame() {
+            endGameDisplay.style.display = 'none';
+            const submitButton = document.querySelector('#end-game button');
+            submitButton.disabled = false;  // 重新啟用提交按鈕
+            startGame();
+        }
+
+    </script>
+
+</body>
+
+</html>

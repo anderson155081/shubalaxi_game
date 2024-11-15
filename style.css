@@ -1,0 +1,126 @@
+ /* 基本樣式 */
+ body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f9; }
+ h1 { margin-top: 20px; }
+
+ /* 排行榜按鈕與彈出視窗 */
+ #leaderboard-button {
+     position: fixed;
+     top: 10px;
+     right: 10px;
+     padding: 10px 20px;
+     background-color: #007bff;
+     color: #fff;
+     border: none;
+     cursor: pointer;
+     font-size: 16px;
+ }
+ #leaderboard {
+     display: none; /* 預設隱藏 */
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     background-color: #fff;
+     border: 1px solid #ccc;
+     padding: 20px;
+     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+     width: 300px;
+     z-index: 1000;
+ }
+ #leaderboard h2 { margin-top: 0; }
+ #leaderboard ul { list-style: none; padding: 0; }
+ #leaderboard ul li { margin: 5px 0; font-size: 16px; }
+ #close-leaderboard {
+     margin-top: 10px;
+     padding: 5px 10px;
+     background-color: #dc3545;
+     color: #fff;
+     border: none;
+     cursor: pointer;
+     font-size: 14px;
+ }
+
+ /* 遊戲結構和控制樣式 */
+ #game-container {
+     display: grid;
+     grid-template-columns: repeat(3, 100px);
+     grid-gap: 20px;
+     justify-content: center;
+     margin: 30px auto;
+ }
+ .hole {
+     width: 100%;
+     height: 80px;
+     position: relative;
+     cursor: pointer;
+     overflow: hidden;
+ }
+
+ .hole::before{
+    background: url('hole.png') no-repeat center bottom;
+    background-size: contain;
+    content: '';
+    width: 100%;
+    height: 40px;
+    display: block;
+    position: absolute;
+    z-index: 2;
+    bottom: -2px;
+ }
+ .hamster {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    bottom: -40px;
+    left: 18px;
+    display: none;
+    transition: transform 0.3s ease;
+    z-index: 1;
+ }
+
+
+ body{
+    overflow: hidden;
+ }
+
+.hamster_game_box{
+    height: 100vh;
+    max-width: 500px;
+    width: 100%;
+    padding-top: 10vh;
+    background: linear-gradient(141.64deg, #FFE2B9 3.57%, #FFC8BA 27.25%, #FFC9A0 40.08%, #FFE5BA 52.91%);
+}
+ .title{
+    width: 320px;
+    height: auto;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+ }
+.game_area{
+    height: calc(90vh - 128px + 100px);
+    background: url(bg.png) top center no-repeat;
+    background-size: cover;
+    overflow-y: auto;
+    top: -100px;
+    position: relative;
+    padding-top: 100px;
+}
+
+@media screen and (max-width:400px) {
+    .title{
+        width: 75vw;
+    }
+    #game-container{
+        grid-template-columns: repeat(3, 80px);
+    }
+    .hamster {
+        width: 50px;
+        height: 50px;
+        bottom: -30px;
+        left: 13px;
+    }
+    .hole::before{
+        bottom: -1.5px;
+    }
+}
