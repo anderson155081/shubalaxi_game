@@ -81,8 +81,8 @@
 
         const leaderboardData = [];  // 宣告排行榜數據
 
-        const defaultCursor = "url('hit.png') , auto";
-        const clickedCursor = "url('hit2.png') , auto";
+        const defaultCursor = "url('hit.png') 16 16, auto";
+        const clickedCursor = "url('hit2.png') 16 16, auto";
 
         // 监听整个文档的点击事件
         document.addEventListener('click', () => {
@@ -169,7 +169,7 @@
             });
 
             setTimeout(() => {
-                hamster.style.transform = 'translateY(-80%)';
+                hamster.style.transform = 'translateY(-65%)';
                 setTimeout(() => {
                     hamster.remove();
                 }, 1000);
