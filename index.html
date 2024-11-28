@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>鼠巴拉西｜第一屆打地鼠大戰</title>
-    <link rel="icon" href="logo.png" type="image/x-icon">
+    <link rel="icon" href="img/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="reset.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -25,16 +25,16 @@
             <p class="text_box">分數：<span id="score">0</span></p>
         </div>
 
-        <img src="title3.png" alt="打地鼠遊戲" class="title">
+        <img src="img/title3.png" alt="打地鼠遊戲" class="title">
 
         <div class="game_area">
             <div class="game_rules">
                 <li>
-                    <img src="chuchi.png" alt="惡魔">
+                    <img src="img/chuchi.png" alt="惡魔">
                     <p>打擊惡魔鼠鼠<span data-stroke="獲得10分">獲得10分</span></p>
                 </li>
                 <li>
-                    <img src="pinky.png" alt="天使">
+                    <img src="img/pinky.png" alt="天使">
                     <p>打擊天使鼠鼠則<span data-stroke="扣10分">扣10分</span></p>
                 </li>
             </div>
@@ -64,9 +64,9 @@
     </div>
 
     <!-- Audio elements -->
-    <audio id="background-music" src="background_music.wav" loop></audio>
-    <audio id="devil-sound" src="click.mp3"></audio>
-    <audio id="angel-sound" src="angel_music.aiff"></audio>
+    <audio id="background-music" src="music/background_music.wav" loop></audio>
+    <audio id="devil-sound" src="music/click.mp3"></audio>
+    <audio id="angel-sound" src="music/angel_music.aiff"></audio>
 
     <!-- Firebase SDK -->
     <script type="module">
@@ -188,7 +188,7 @@
             const hamsterType = Math.random() < 0.5 ? 'angel' : 'devil';
             const hamster = document.createElement('img');
 
-            hamster.src = hamsterType === 'angel' ? 'pinky.png' : 'chuchi.png';
+            hamster.src = hamsterType === 'angel' ? 'img/pinky.png' : 'img/chuchi.png';
             hamster.classList.add('hamster', hamsterType);
             hamster.style.display = 'block';
             
@@ -324,8 +324,8 @@
         });
 
         // Set up cursor
-        const defaultCursor = "url('hit.png') 16 16, auto";
-        const clickedCursor = "url('hit2.png') 16 16, auto";
+        const defaultCursor = "url('img/hit.png') 16 16, auto";
+        const clickedCursor = "url('img/hit2.png') 16 16, auto";
 
         document.body.style.cursor = defaultCursor;
         

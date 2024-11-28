@@ -67,7 +67,7 @@
  }
 
  .hole::before{
-    background: url('hole.png') no-repeat center bottom;
+    background: url('img/hole.png') no-repeat center bottom;
     background-size: contain;
     content: '';
     width: 100%;
@@ -85,7 +85,7 @@
     bottom: -60px;
     left: 5px;
     display: none;
-    cursor: url(hit.png),pointer;
+    cursor: url(img/hit.png),pointer;
     transition: transform 0.3s ease;
     z-index: 2;
  }
@@ -96,8 +96,8 @@
 
  body{
     overflow: hidden;
-    cursor: url(hit.png), 16 16 pointer;
-    background: url(bg.png) center bottom / cover no-repeat;
+    cursor: url(img/hit.png), 16 16 pointer;
+    background: url(img/bg.png) center bottom / cover no-repeat;
     backdrop-filter: blur(11px);
 
  }
@@ -129,7 +129,7 @@
     max-width: 500px;
     width: 100%;
     padding-top: 12vh;
-    background: url(cloud.png), linear-gradient(141.64deg, #FFE2B9 3.57%, #FFC8BA 27.25%, #FFC9A0 40.08%, #FFE5BA 52.91%)  center top no-repeat;
+    background: url(img/cloud.png), linear-gradient(141.64deg, #FFE2B9 3.57%, #FFC8BA 27.25%, #FFC9A0 40.08%, #FFE5BA 52.91%)  center top no-repeat;
     background-size: cover;
 }
 
@@ -142,7 +142,7 @@
  }
 .game_area{
     height: calc(88vh - 128px + 100px);
-    background: url(bg.png) top center no-repeat;
+    background: url(img/bg.png) top center no-repeat;
     background-size: cover;
     overflow-y: auto;
     top: -100px;
@@ -186,11 +186,11 @@ button{
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     color: #FFF;
     letter-spacing: 0.08rem;
-    cursor:url('hit.png') 16 16,pointer;
+    cursor:url('img/hit.png') 16 16,pointer;
 }
 
 button:active{
-    cursor:url('hit2.png') 16 16,pointer;
+    cursor:url('img/hit2.png') 16 16,pointer;
 }
 
 /* 遊戲規則 */
@@ -262,7 +262,7 @@ button:active{
     content: '';
     width:70px;
     height: 80px;
-    background: url(hit_big.png) no-repeat center center / 100%;
+    background: url(img/hit_big.png) no-repeat center center / 100%;
     top: -30px;
     right: -26px;
 }
@@ -271,14 +271,14 @@ button:active{
     content: '';
     width:70px;
     height: 80px;
-    background: url(hit_big.png) no-repeat center center / 100%;
+    background: url(img/hit_big.png) no-repeat center center / 100%;
     bottom: -30px;
     left: -26px;
 }
 
 .foot{
     position: absolute;
-    background: url(foot.png)no-repeat center / 100%;
+    background: url(img/foot.png)no-repeat center / 100%;
     width: 50px;
     height: 50px;
     top: -25px;
