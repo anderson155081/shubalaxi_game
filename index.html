@@ -211,12 +211,20 @@
         function pauseGame() {
             isPaused = !isPaused;
             pauseButton.textContent = isPaused ? "繼續遊戲" : "暫停遊戲";
-           
+            
+           // 如果暫停，清除所有顯示中的鼠鼠
+            if (isPaused) {
+                document.querySelectorAll('.hamster').forEach(hamster => hamster.remove());
+            }
         }
 
         function endGame() {
             clearInterval(timer);
             clearInterval(gameInterval);
+
+             // 清理所有顯示中的鼠鼠
+            document.querySelectorAll('.hamster').forEach(hamster => hamster.remove());
+
             finalScoreDisplay.textContent = score;
             endGameDisplay.style.display = 'block';
             startButton.style.display = 'none';
