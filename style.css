@@ -1,7 +1,9 @@
 @font-face {
     font-family: SweiGothicCJKtc-bold;
-    src: url(https://cdn.jsdelivr.net/gh/max32002/swei-gothic@2.129/WebFont/CJK%20TC/SweiGothicCJKtc-bold.woff2) format("woff2")
-    , url(https://cdn.jsdelivr.net/gh/max32002/swei-gothic@2.129/WebFont/CJK%20TC/SweiGothicCJKtc-bold.woff) format("woff");
+    src:
+    local("SweiGothicCJKtc-bold"),
+    url(font/SweiGothicCJKtc-Bold.woff2) format("woff2"),
+    url(font/SweiGothicCJKtc-Bold.woff) format("woff")
   }
  
  /* 基本樣式 */
