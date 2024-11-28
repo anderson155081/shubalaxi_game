@@ -89,38 +89,32 @@
         const db = getDatabase(app);
 
         window.submitScoreToFirebase = async (username, score) => {
-            const scoresRef = ref(db, 'leaderboard');
-            const newScoreRef = push(scoresRef);
-
+            const scoresRef = ref(db, `leaderboard/${username}`); // 以 username 作為唯一鍵
             try {
-                await set(newScoreRef, {
+                await set(scoresRef, {
                     name: username,
                     score: score,
                     timestamp: Date.now()
                 });
+                console.log(`Score updated for ${username}`);
             } catch (error) {
                 console.error("Error submitting score:", error);
                 alert("提交分數時發生錯誤，請稍後再試");
             }
         };
 
+
         window.fetchLeaderboardData = (callback) => {
             const scoresRef = ref(db, 'leaderboard');
-            const scoresQuery = query(scoresRef, orderByChild('score'));
-
-            onValue(scoresQuery, (snapshot) => {
+            onValue(scoresRef, (snapshot) => {
                 const data = snapshot.val();
                 if (!data) {
                     callback([]);
                     return;
                 }
 
-                const scoresArray = Object.entries(data)
-                    .map(([key, value]) => ({
-                        id: key,
-                        ...value
-                    }))
-                    .sort((a, b) => b.score - a.score);
+                const scoresArray = Object.values(data) // 使用 Object.values 轉為陣列
+                    .sort((a, b) => b.score - a.score); // 按分數降序排序
 
                 callback(scoresArray);
             }, (error) => {
@@ -128,6 +122,7 @@
                 callback([]);
             });
         };
+
     </script>
 
     <script>
