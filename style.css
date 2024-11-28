@@ -54,6 +54,7 @@
      grid-template-columns: repeat(3, 100px);
      grid-gap: 10px;
      justify-content: center;
+     margin-bottom: 10px;
  }
  .hole {
      width: 100%;
@@ -103,7 +104,7 @@
     display: flex;
     justify-content: space-evenly;
     position: absolute;
-    top: 10px;
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
@@ -125,7 +126,7 @@
     height: 100vh;
     max-width: 500px;
     width: 100%;
-    padding-top: 10vh;
+    padding-top: 12vh;
     background: url(cloud.png), linear-gradient(141.64deg, #FFE2B9 3.57%, #FFC8BA 27.25%, #FFC9A0 40.08%, #FFE5BA 52.91%)  center top no-repeat;
     background-size: cover;
 }
@@ -138,7 +139,7 @@
     z-index: 2;
  }
 .game_area{
-    height: calc(90vh - 128px + 100px);
+    height: calc(88vh - 128px + 100px);
     background: url(bg.png) top center no-repeat;
     background-size: cover;
     overflow-y: auto;
@@ -169,7 +170,7 @@
     }
 
     .game_area{
-        height: calc(90vh - 103px + 100px);
+        height: calc(88vh - 103px + 100px);
     }
 }
 button{
