@@ -81,6 +81,7 @@
 
     <audio id="background-music" src="background_music.wav" loop></audio>
     <audio id="devil-sound" src="click.mp3"></audio>
+    <audio id="angel-sound" src="angel_music.aiff"></audio>
     <script>
         let score = 0; //記錄分數
         let timeLeft = 30; //倒數計時器 從30秒開始
@@ -183,9 +184,12 @@
             // 點擊事件
             hamster.addEventListener('click', () => {
                 const devilSound = document.getElementById('devil-sound');
+                const angelSound = document.getElementById('angel-sound');
 
                 if (hamsterType === 'angel') {
                     score -= 10;
+                    angelSound.currentTime = 0; // 從頭播放
+                    angelSound.play();
                 } else {
                     score += 10;
                     devilSound.currentTime = 0; // 從頭播放
@@ -234,7 +238,17 @@
         function pauseGame() {
             isPaused = !isPaused;
             pauseButton.textContent = isPaused ? "繼續遊戲" : "暫停遊戲";
-         
+            
+            const backgroundMusic = document.getElementById('background-music');
+
+            if (isPaused) {
+                // 當遊戲暫停，停止背景音樂
+                backgroundMusic.pause();
+            } else {
+                // 當遊戲恢復，繼續播放背景音樂
+                backgroundMusic.play();
+            }
+
            // 如果暫停，清除所有顯示中的鼠鼠
             if (isPaused) {
                 document.querySelectorAll('.hamster').forEach(hamster => hamster.remove());
