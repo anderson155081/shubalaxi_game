@@ -23,13 +23,22 @@
             </ul>
             <button id="close-leaderboard" onclick="toggleLeaderboard()">關閉</button>
         </div> -->
-
+        <div class="text_box_outer">
+            <p class="text_box">時間剩餘：<span id="timer">30</span> 秒</p>
+            <p class="text_box">分數：<span id="score">0</span></p>
+        </div>
        <img src="title.png" alt="打地鼠遊戲" class="title">
 
         <div class="game_area">
-            <div class="text_box_outer">
-                <p class="text_box">時間剩餘：<span id="timer">30</span> 秒</p>
-                <p class="text_box">分數：<span id="score">0</span></p>
+            <div class="game_rules">
+                <li>
+                    <img src="chuchi.png" alt="惡魔">
+                    <p>打擊惡魔鼠鼠獲得10分</p>
+                </li>
+                <li>
+                    <img src="pinky.png" alt="天使">
+                    <p>打擊天使鼠鼠則扣10分！</p>
+                </li>
             </div>
             <!-- 遊戲區域和控制按鈕 -->
             <div id="game-container">
