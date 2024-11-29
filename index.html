@@ -72,7 +72,7 @@
     <script type="module">
         // Firebase configuration and initialization
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-        import { getDatabase, ref, set, push, onValue, query, orderByChild } 
+        import { getDatabase, ref, set, push, onValue, get, query, orderByChild } 
         from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
         const firebaseConfig = {
@@ -89,19 +89,34 @@
         const db = getDatabase(app);
 
         window.submitScoreToFirebase = async (username, score) => {
-            const scoresRef = ref(db, `leaderboard/${username}`); // 以 username 作為唯一鍵
+            const scoresRef = ref(db, `leaderboard/${username}`);
             try {
+                // 嘗試先獲取現有數據
+                const snapshot = await get(scoresRef);
+                const currentData = snapshot.val();
+
+                // 判斷是否需要更新分數
+                if (currentData && currentData.score >= score) {
+                console.log(`New score (${score}) is not higher than the current score (${currentData.score})`);
+                alert("新分數未超過目前最高分，未更新！");
+                return;
+                }
+
+                // 更新分數（首次或新分數更高時）
                 await set(scoresRef, {
-                    name: username,
-                    score: score,
-                    timestamp: Date.now()
+                name: username,
+                score: score,
+                timestamp: Date.now(),
                 });
+
                 console.log(`Score updated for ${username}`);
             } catch (error) {
                 console.error("Error submitting score:", error);
                 alert("提交分數時發生錯誤，請稍後再試");
             }
         };
+
+
 
 
         window.fetchLeaderboardData = (callback) => {
@@ -113,8 +128,12 @@
                     return;
                 }
 
-                const scoresArray = Object.values(data) // 使用 Object.values 轉為陣列
-                    .sort((a, b) => b.score - a.score); // 按分數降序排序
+                // 將物件轉為陣列並排序
+                const scoresArray = Object.keys(data).map((key) => ({
+                    name: key,
+                    score: data[key].score,
+                    timestamp: data[key].timestamp
+                })).sort((a, b) => b.score - a.score); // 按分數降序排序
 
                 callback(scoresArray);
             }, (error) => {
@@ -122,6 +141,7 @@
                 callback([]);
             });
         };
+
 
     </script>
 
