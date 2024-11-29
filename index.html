@@ -239,8 +239,8 @@
 
             setTimeout(() => {
                 hamster.style.transform = 'translateY(-70px)';
-                setTimeout(() => hamster.remove(), 1000);
-            }, randomTime(1500, 2000));
+                setTimeout(() => hamster.remove(), 1200);
+            }, randomTime(1000, 2000));
         }
 
         // Game control functions
@@ -354,7 +354,7 @@
             });
 
             // 300 毫秒後自動消失
-            setTimeout(() => bossHamster.remove(), 300);
+            setTimeout(() => bossHamster.remove(), 900);
         }, 200); // 每 200 毫秒生成一隻
 
         // Boss 模式持續 15 秒
