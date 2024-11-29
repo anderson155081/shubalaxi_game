@@ -119,13 +119,24 @@
 }
 #leaderboard ul li span.score{
     flex: none;
-    width: 50px;
+    width: 65px;
     height: 24px;
+    padding-left: 7.5px;
     line-height: 26px;
     margin: 12px 8px 12px 0;
     background-color: #ef998c;
     text-align: center;
     border-radius: 5px;
+    position: relative;
+}
+#leaderboard ul li span.score::before{
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: url(img/foot.png) no-repeat center / 100%;
+    left: -15px;
+    top: -2.5px;
 }
 #leaderboard ul li span{
     text-align: left;
