@@ -268,7 +268,7 @@
         // 隨機時間觸發 Boss 模式
         setTimeout(() => {
             if (GameState.isPlaying) startBossMode();
-        }, randomTime(10000, 20000)); // 10 到 20 秒之間隨機觸發
+        }, randomTime(25000, 40000)); // 10 到 20 秒之間隨機觸發
 
         // 設置遊戲計時器
         const timerInterval = setInterval(() => {
@@ -354,7 +354,7 @@
             });
 
             // 300 毫秒後自動消失
-            setTimeout(() => bossHamster.remove(), 900);
+            setTimeout(() => bossHamster.remove(), 700);
         }, 200); // 每 200 毫秒生成一隻
 
         // Boss 模式持續 15 秒
@@ -365,7 +365,7 @@
             elements.backgroundMusic.play(); // 恢復背景音樂
 
             // 恢復普通鼠鼠的生成
-            GameState.hamsterInterval = setInterval(showHamster, 600);
+            GameState.hamsterInterval = setInterval(showHamster, 300);
         }, 15000); // Boss 模式持續 15 秒
     }, 2000); // 警示訊息顯示 2 秒後啟動 Boss 模式
 }
