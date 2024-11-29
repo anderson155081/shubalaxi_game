@@ -258,6 +258,7 @@
     padding-top: 12vh;
     background: url(img/cloud.png), linear-gradient(141.64deg, #FFE2B9 3.57%, #FFC8BA 27.25%, #FFC9A0 40.08%, #FFE5BA 52.91%)  center top no-repeat;
     background-size: cover;
+    overflow: hidden;
 }
 
  .title{
