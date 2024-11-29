@@ -69,11 +69,18 @@
             </div>
         </div>
     </div>
-
+    <!-- boss警示訊息 -->
+    <div id="boss-alert" class="alert hidden">
+        <p>警告！超級大怪獸即將來襲！</p>
+    </div>
+    
     <!-- Audio elements -->
     <audio id="background-music" src="music/background_music.wav" loop></audio>
     <audio id="devil-sound" src="music/click.mp3"></audio>
     <audio id="angel-sound" src="music/angel_music.aiff"></audio>
+    <audio id="boss-music" src="music/boss_music.mp3" loop></audio>
+    <audio id="boss-sound" src="music/boss_sound.mp3"></audio>
+
 
     <!-- Firebase SDK -->
     <script type="module">
@@ -238,41 +245,46 @@
 
         // Game control functions
         function startGame() {
-            GameState.score = 0;
-            GameState.timeLeft = 30;
-            GameState.isPlaying = true;
-            GameState.isPaused = false;
+        GameState.score = 0;
+        GameState.timeLeft = 60; // 修改遊戲時間為 60 秒
+        GameState.isPlaying = true;
+        GameState.isPaused = false;
 
-            elements.backgroundMusic.volume = 0.5;
-            elements.backgroundMusic.currentTime = 0;
-            elements.backgroundMusic.play();
+        elements.backgroundMusic.volume = 0.5;
+        elements.backgroundMusic.currentTime = 0;
+        elements.backgroundMusic.play();
 
-            elements.score.textContent = GameState.score;
-            elements.timer.textContent = GameState.timeLeft;
-            elements.endGameDisplay.style.display = 'none';
-            elements.startButton.style.display = 'none';
-            elements.pauseButton.style.display = 'block';
-            elements.pauseButton.disabled = false;
-            elements.restartButton.style.display = 'none';
+        elements.score.textContent = GameState.score;
+        elements.timer.textContent = GameState.timeLeft;
+        elements.endGameDisplay.style.display = 'none';
+        elements.startButton.style.display = 'none';
+        elements.pauseButton.style.display = 'block';
+        elements.pauseButton.disabled = false;
+        elements.restartButton.style.display = 'none';
 
-            const gameInterval = setInterval(() => {
-                if (!GameState.isPaused) {
-                    showHamster();
+        // 設置普通鼠鼠的出現計時器
+        GameState.hamsterInterval = setInterval(showHamster, 600);
+
+        // 隨機時間觸發 Boss 模式
+        setTimeout(() => {
+            if (GameState.isPlaying) startBossMode();
+        }, randomTime(10000, 20000)); // 10 到 20 秒之間隨機觸發
+
+        // 設置遊戲計時器
+        const timerInterval = setInterval(() => {
+            if (!GameState.isPaused) {
+                GameState.timeLeft--;
+                elements.timer.textContent = GameState.timeLeft;
+                if (GameState.timeLeft <= 0) {
+                    clearInterval(GameState.hamsterInterval);
+                    clearInterval(timerInterval);
+                    endGame();
                 }
-            }, 600);
+            }
+        }, 1000);
+    }
 
-            const timerInterval = setInterval(() => {
-                if (!GameState.isPaused) {
-                    GameState.timeLeft--;
-                    elements.timer.textContent = GameState.timeLeft;
-                    if (GameState.timeLeft <= 0) {
-                        clearInterval(gameInterval);
-                        clearInterval(timerInterval);
-                        endGame();
-                    }
-                }
-            }, 1000);
-        }
+
 
         function pauseGame() {
             GameState.isPaused = !GameState.isPaused;
@@ -297,6 +309,69 @@
             elements.pauseButton.style.display = 'none';
             elements.restartButton.style.display = 'block';
         }
+
+        // boss模式
+        function startBossMode() {
+    if (GameState.isPaused || !GameState.isPlaying) return;
+
+    // 顯示警示訊息
+    const bossAlert = document.getElementById('boss-alert');
+    bossAlert.classList.remove('hidden');
+
+    // 2 秒後隱藏警示訊息並啟動 Boss 模式
+    setTimeout(() => {
+        bossAlert.classList.add('hidden');
+
+        // 切換到 Boss 音樂
+        elements.backgroundMusic.pause();
+        const bossMusic = document.getElementById('boss-music');
+        bossMusic.currentTime = 0;
+        bossMusic.play();
+
+        // 停止普通鼠鼠的生成
+        clearInterval(GameState.hamsterInterval);
+
+        // 設置 Boss 鼠鼠快速生成和消失的邏輯
+        const bossInterval = setInterval(() => {
+            const hole = randomHole();
+            const bossHamster = document.createElement('img');
+            bossHamster.src = 'img/boss.png';
+            bossHamster.classList.add('hamster', 'boss');
+            bossHamster.style.display = 'block';
+
+            hole.appendChild(bossHamster);
+
+            // 點擊時增加分數並播放音效
+            bossHamster.addEventListener('click', () => {
+                GameState.score += 50;
+                elements.score.textContent = GameState.score;
+
+                const bossSound = document.getElementById('boss-sound');
+                bossSound.currentTime = 0;
+                bossSound.play();
+
+                bossHamster.remove();
+            });
+
+            // 300 毫秒後自動消失
+            setTimeout(() => bossHamster.remove(), 300);
+        }, 200); // 每 200 毫秒生成一隻
+
+        // Boss 模式持續 15 秒
+        setTimeout(() => {
+            clearInterval(bossInterval);
+            bossMusic.pause();
+            bossMusic.currentTime = 0;
+            elements.backgroundMusic.play(); // 恢復背景音樂
+
+            // 恢復普通鼠鼠的生成
+            GameState.hamsterInterval = setInterval(showHamster, 600);
+        }, 15000); // Boss 模式持續 15 秒
+    }, 2000); // 警示訊息顯示 2 秒後啟動 Boss 模式
+}
+
+
+
 
         // Event listeners
         elements.startButton.addEventListener('click', startGame);

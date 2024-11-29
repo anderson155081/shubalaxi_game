@@ -461,5 +461,39 @@ input::placeholder{
     display: none;
 }
 
+/* boss */
+.hamster.boss {
+    width: 80px;
+    height: 80px;
+    animation: shake 0.3s infinite;
+    position: absolute;
+    bottom: 0px;
+    left: 5px;
+
+}
+
+@keyframes shake {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(5px, 0); }
+}
+
+.alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    font-size: 24px;
+    padding: 20px 40px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.hidden {
+    display: none;
+}
 
 
