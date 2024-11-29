@@ -12,7 +12,7 @@
 
  /* 排行榜按鈕與彈出視窗 */
  #leaderboard-button {
-    position: fixed;
+    position: absolute;
     top: 30%;
     right: 4px;
     padding:0;
@@ -458,5 +458,6 @@ input::placeholder{
     z-index: 999;
     display: none;
 }
+
 
 
