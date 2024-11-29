@@ -21,7 +21,7 @@
     border: none;
     cursor: pointer;
     font-size: 16px;
-z-index: 97;
+    z-index: 97;
  }
  #leaderboard {
     display: none; /* 預設隱藏 */
@@ -29,15 +29,16 @@ z-index: 97;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff;
+    background-color: #c26969;
     border: 1px solid #ccc;
-    padding: 20px;
+    padding: 0 8px 30px 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     width: 300px;
     z-index: 1000;
     color: #E69183;
     border: 8px solid #E69183;
     border-radius: 30px;
+    min-height: 20%;
  }
  #leaderboard::before{
     content: '';
@@ -49,9 +50,76 @@ z-index: 97;
     left: 50%;
     transform: translateX(-50%);
  }
- #leaderboard h2 { margin-top: 0; }
- #leaderboard ul { list-style: none; padding: 0; }
- #leaderboard ul li { margin: 5px 0; font-size: 16px; }
+ #leaderboard h2 { 
+    background: #ffe174;
+    border-radius: 0 0 30px 30px;
+    padding: 18px 8px 16px 8px;
+    width: 190px;
+    margin: 0 auto;
+    color: #cb7125; 
+}
+ #leaderboard ul { 
+    list-style: none; 
+    padding: 0; 
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+
+}
+ #leaderboard ul li { 
+    font-size: 16px;
+    display: flex;
+    background: #efafa4;
+    color: #FFF;
+    height: 50px;
+    border-radius: 8px;
+    align-items: center;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 2px solid #E69183;
+    overflow: hidden;
+}
+#leaderboard ul li span.rank{
+    flex: none;
+    width: 50px;
+    text-align: center;
+    background-color: #E69183;
+    border-radius: 0 25px 0 0;
+}
+
+#leaderboard ul li:nth-child(1) > span.rank{
+    text-indent: -9999px;
+    background: url(img/medal_no1.svg)no-repeat center / 30px;
+}
+#leaderboard ul li:nth-child(2) > span.rank{
+    text-indent: -9999px;
+    background: url(img/medal_no3.svg)no-repeat center / 30px;
+}
+#leaderboard ul li:nth-child(3) > span.rank{
+    text-indent: -9999px;
+    background: url(img/medal_no2.svg)no-repeat center / 30px;
+}
+#leaderboard ul li span.name{
+    font-size: 14px;
+    text-shadow: 0px 1px 0 #ec9385;
+    flex: 1 1 auto;
+    width: 100%;
+}
+#leaderboard ul li span.score{
+    flex: none;
+    width: 50px;
+    height: 24px;
+    line-height: 26px;
+    margin: 12px 8px 12px 0;
+    background-color: #cb7575;
+    text-align: center;
+    border-radius: 5px;
+}
+#leaderboard ul li span{
+    text-align: left;
+    height: 100%;
+    line-height: 50px;
+}
  #close-leaderboard {
     position: absolute;
     cursor: pointer;
