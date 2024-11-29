@@ -95,7 +95,6 @@
     height: 50px;
     border-radius: 8px;
     align-items: center;
-    border-top: 2px solid rgba(255, 255, 255, 0.3);
     border-bottom: 2px solid #E69183;
     overflow: hidden;
     flex: none;
@@ -109,20 +108,23 @@
     width: 50px;
     text-align: center;
     background-color: #ea8f8d;
-    border-radius: 0 25px 0 0;
+    border-radius: 0 25px 25px 0;
 }
+/* #leaderboard ul li:nth-child(1),#leaderboard ul li:nth-child(2),#leaderboard ul li:nth-child(3){
+    background: #f4acab url(img/white_bg.png)no-repeat center / cover;
+} */
 
 #leaderboard ul li:nth-child(1) > span.rank{
     text-indent: -9999px;
-    background: url(img/medal_no1.svg)no-repeat center / 30px;
+    background: url(img/medal_no1.png)no-repeat center / 30px;
 }
 #leaderboard ul li:nth-child(2) > span.rank{
     text-indent: -9999px;
-    background: url(img/medal_no3.svg)no-repeat center / 30px;
+    background: url(img/medal_no2.png)no-repeat center / 30px;
 }
 #leaderboard ul li:nth-child(3) > span.rank{
     text-indent: -9999px;
-    background: url(img/medal_no2.svg)no-repeat center / 30px;
+    background: url(img/medal_no3.png)no-repeat center / 30px;
 }
 #leaderboard ul li span.name{
     font-size: 14px;
