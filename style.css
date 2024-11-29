@@ -325,9 +325,7 @@ input::placeholder{
     font-family: 'SweiGothicCJKtc-bold', sans-serif;
     color: #ffd6d0;
 }
-.body_mask{
-    display: block;
-}
+
 
 .hide{
     display: none;
