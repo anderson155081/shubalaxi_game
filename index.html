@@ -76,7 +76,7 @@
     
     <!-- Audio elements -->
     <audio id="background-music" src="music/background_music.wav" loop></audio>
-    <audio id="devil-sound" src="music/click.mp3"></audio>
+    <audio id="devil-sound" src="music/click.mov"></audio>
     <audio id="angel-sound" src="music/angel_music.aiff"></audio>
     <audio id="boss-music" src="music/boss_music.mp3" loop></audio>
     <audio id="boss-sound" src="music/boss_sound.mp3"></audio>
@@ -163,7 +163,7 @@
         // Game logic
         const GameState = {
             score: 0,
-            timeLeft: 30,
+            timeLeft: 60,
             isPlaying: false,
             isPaused: false
         };
@@ -209,6 +209,9 @@
             const holes = document.querySelectorAll('.hole');
             return holes[Math.floor(Math.random() * holes.length)];
         }
+
+   
+        
 
         function showHamster() {
             if (GameState.isPaused) return;
