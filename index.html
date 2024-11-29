@@ -84,6 +84,13 @@
 
     <!-- Firebase SDK -->
     <script type="module">
+        document.addEventListener("DOMContentLoaded", function() {
+            preloadAudio('music/boss_sound.mp3');
+            preloadAudio('music/angel_music.aiff');
+            preloadAudio('music/click.mp3');
+            preloadAudio('music/background_music.wav'); // 背景音乐
+        });
+
         // Firebase configuration and initialization
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
         import { getDatabase, ref, set, push, onValue, get, query, orderByChild } 
@@ -336,24 +343,24 @@
 
         // boss模式
         function startBossMode() {
-    if (GameState.isPaused || !GameState.isPlaying) return;
+        if (GameState.isPaused || !GameState.isPlaying) return;
 
-    // 顯示警示訊息
-    const bossAlert = document.getElementById('boss-alert');
-    bossAlert.classList.remove('hidden');
+        // 顯示警示訊息
+        const bossAlert = document.getElementById('boss-alert');
+        bossAlert.classList.remove('hidden');
 
-    // 2 秒後隱藏警示訊息並啟動 Boss 模式
-    setTimeout(() => {
-        bossAlert.classList.add('hidden');
+        // 2 秒後隱藏警示訊息並啟動 Boss 模式
+        setTimeout(() => {
+            bossAlert.classList.add('hidden');
 
-        // 切換到 Boss 音樂
-        elements.backgroundMusic.pause();
-        const bossMusic = document.getElementById('boss-music');
-        bossMusic.currentTime = 0;
-        bossMusic.play();
+            // 切換到 Boss 音樂
+            elements.backgroundMusic.pause();
+            const bossMusic = document.getElementById('boss-music');
+            bossMusic.currentTime = 0;
+            bossMusic.play();
 
-        // 停止普通鼠鼠的生成
-        clearInterval(GameState.hamsterInterval);
+            // 停止普通鼠鼠的生成
+            clearInterval(GameState.hamsterInterval);
 
         // 設置 Boss 鼠鼠快速生成和消失的邏輯
         const bossInterval = setInterval(() => {
