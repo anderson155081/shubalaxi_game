@@ -78,10 +78,10 @@
     
     <!-- Audio elements -->
     <audio id="background-music" src="music/background_music.wav" loop></audio>
-    <audio id="devil-sound" src="music/click.mov"></audio>
-    <audio id="angel-sound" src="music/angel_music.aiff"></audio>
-    <audio id="boss-music" src="music/boss_music.mp3" loop></audio>
-    <audio id="boss-sound" src="music/boss_sound.mp3"></audio>
+    <audio id="devil-sound" src="music/click.mov"  preload="auto"></audio>
+    <audio id="angel-sound" src="music/angel_music.aiff"  preload="auto"></audio>
+    <audio id="boss-music" src="music/boss_music.mp3"  preload="auto" loop></audio>
+    <audio id="boss-sound" src="music/boss_sound.mp3"  preload="auto"></audio>
 
 
     <!-- Firebase SDK -->
@@ -392,7 +392,7 @@
 
 
             // 300 毫秒後自動消失
-            setTimeout(() => bossHamster.remove(), 400);
+            setTimeout(() => bossHamster.remove(), 500);
         }, 200); // 每 200 毫秒生成一隻
 
         // Boss 模式持續 15 秒
