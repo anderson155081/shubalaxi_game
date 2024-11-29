@@ -496,4 +496,9 @@ input::placeholder{
     display: none;
 }
 
+body.keyboard-open {
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+}
 

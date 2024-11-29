@@ -488,5 +488,21 @@
         // Initialize game
         initializeHoles();
     </script>
+    <script>
+        let initialViewportHeight = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            const currentViewportHeight = window.innerHeight;
+
+            if (currentViewportHeight < initialViewportHeight) {
+                // 鍵盤彈出
+                document.body.classList.add('keyboard-open');
+            } else {
+                // 鍵盤收起
+                document.body.classList.remove('keyboard-open');
+            }
+        });
+
+    </script>
 </body>
 </html>
