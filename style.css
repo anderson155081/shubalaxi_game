@@ -131,7 +131,7 @@
     font-size: 14px;
     width: calc(100% - 115px);
     margin-left: 8px;
-    font-size: 12px;
+    font-size: 14px;
     flex: 1 1 auto;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -484,12 +484,14 @@ input::placeholder{
     transform: translate(-50%, -50%);
     background-color: rgba(255, 0, 0, 0.8);
     color: white;
-    font-size: 24px;
-    padding: 20px 40px;
+    font-size: 18px;
+    padding: 20px 24px;
     border-radius: 10px;
     text-align: center;
     z-index: 1000;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    line-height: 24px;
 }
 
 .hidden {
