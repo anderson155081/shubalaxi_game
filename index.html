@@ -8,12 +8,17 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="reset.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Rubik字體 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div class="hamster_game_box">
         <button id="leaderboard-button">排行榜</button>
-        
+        <div id="mask_bg"></div>
         <div id="leaderboard">
             <h2>排行榜</h2>
             <ul id="leaderboard-list"></ul>
@@ -298,16 +303,18 @@
         elements.pauseButton.addEventListener('click', pauseGame);
         elements.restartButton.addEventListener('click', startGame);
         elements.leaderboardButton.addEventListener('click', () => {
+            const mask = document.getElementById('mask_bg'); // 獲取遮罩層
             elements.leaderboard.style.display =
                 elements.leaderboard.style.display === 'none' ? 'block' : 'none';
 
             if (elements.leaderboard.style.display === 'block') {
+                mask.style.display = 'block';
                 fetchLeaderboardData((scores) => {
                     const leaderboardList = document.getElementById('leaderboard-list');
                     leaderboardList.innerHTML = '';  // 清空現有的排行榜
 
                     // 遍歷排行榜數據，最多顯示前5名
-                    scores.slice(0, 5).forEach((entry, index) => {
+                    scores.slice(0, 10).forEach((entry, index) => {
                         const li = document.createElement('li');
                         
                         // 創建排名 span
@@ -334,12 +341,14 @@
                         leaderboardList.appendChild(li);
                     });
                 });
-            }
+            } 
         });
 
 
         elements.closeLeaderboard.addEventListener('click', () => {
+            const mask = document.getElementById('mask_bg'); // 獲取遮罩層
             elements.leaderboard.style.display = 'none';
+            mask.style.display = 'none';
         });
 
         elements.submitScoreButton.addEventListener('click', async () => {
@@ -352,7 +361,7 @@
                 fetchLeaderboardData((scores) => {
                     const leaderboardList = document.getElementById('leaderboard-list');
                     leaderboardList.innerHTML = '';
-                    scores.slice(0, 5).forEach((entry, index) => {
+                    scores.slice(0, 10).forEach((entry, index) => {
                         // 創建 li 元素
                         const li = document.createElement('li');
 

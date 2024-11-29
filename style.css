@@ -29,16 +29,17 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #c26969;
+    background-color: #ffdcdc;
     border: 1px solid #ccc;
-    padding: 0 8px 30px 8px;
+    padding: 0 8px 0px 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     width: 300px;
     z-index: 1000;
     color: #E69183;
-    border: 8px solid #E69183;
+    border: 8px solid #f3acab;
     border-radius: 30px;
     min-height: 20%;
+    max-height: 70%;
  }
  #leaderboard::before{
     content: '';
@@ -51,12 +52,13 @@
     transform: translateX(-50%);
  }
  #leaderboard h2 { 
-    background: #ffe174;
+    background: #f4acab;
     border-radius: 0 0 30px 30px;
     padding: 18px 8px 16px 8px;
     width: 190px;
     margin: 0 auto;
-    color: #cb7125; 
+    color: #FFF; 
+    border-bottom: 2px solid #ed8d8c;
 }
  #leaderboard ul { 
     list-style: none; 
@@ -65,12 +67,20 @@
     flex-direction: column;
     gap: 8px;
     margin-top: 16px;
-
+    max-height: 300px;
+    overflow-y: auto;
+}
+#leaderboard ul::-webkit-scrollbar{
+    width: 0px;
+    background: transparent;
+}
+#leaderboard ul::-webkit-scrollbar-thumb{
+    background: transparent;
 }
  #leaderboard ul li { 
     font-size: 16px;
     display: flex;
-    background: #efafa4;
+    background: #fac0b7;
     color: #FFF;
     height: 50px;
     border-radius: 8px;
@@ -78,12 +88,13 @@
     border-top: 2px solid rgba(255, 255, 255, 0.3);
     border-bottom: 2px solid #E69183;
     overflow: hidden;
+    flex: none;
 }
 #leaderboard ul li span.rank{
     flex: none;
     width: 50px;
     text-align: center;
-    background-color: #E69183;
+    background-color: #f1a79b;
     border-radius: 0 25px 0 0;
 }
 
@@ -104,6 +115,7 @@
     text-shadow: 0px 1px 0 #ec9385;
     flex: 1 1 auto;
     width: 100%;
+    margin-left: 8px;
 }
 #leaderboard ul li span.score{
     flex: none;
@@ -111,7 +123,7 @@
     height: 24px;
     line-height: 26px;
     margin: 12px 8px 12px 0;
-    background-color: #cb7575;
+    background-color: #ef998c;
     text-align: center;
     border-radius: 5px;
 }
@@ -119,18 +131,19 @@
     text-align: left;
     height: 100%;
     line-height: 50px;
+    font-family: 'Rubik';
+    font-weight: 600;
 }
  #close-leaderboard {
-    position: absolute;
     cursor: pointer;
     font-size: 16px;
-    left: 50%;
-    transform: translateX(-50%);
     box-shadow: none;
-    border: 5px solid #E69183;
-    color: #E69183;
-    bottom: -26px;
-    background: #FFF;
+    border: unset;
+    border: 4px solid #f4acab;
+    color: #FFF;
+    background: #f4acab;
+    margin: 8px auto;
+    padding: 5px 18px;
  }
 
  /* 遊戲結構和控制樣式 */
@@ -401,6 +414,17 @@ input::placeholder{
 
 .hint_text{
     font-size: 9px;
+}
+
+#mask_bg{
+    position: fixed;
+    background: rgba(0, 0, 0, 0.25);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: none;
 }
 
 
