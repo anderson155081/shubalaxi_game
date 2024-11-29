@@ -26,7 +26,7 @@
         </div>
 
         <div class="text_box_outer">
-            <p class="text_box">時間剩餘：<span id="timer">30</span> 秒</p>
+            <p class="text_box">時間剩餘：<span id="timer">60</span> 秒</p>
             <p class="text_box">分數：<span id="score">0</span></p>
         </div>
 
@@ -210,8 +210,21 @@
             return holes[Math.floor(Math.random() * holes.length)];
         }
 
-   
-        
+        // Audio API
+        function playSoundWithWebAudio(audioUrl) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)(); // 創建音頻上下文
+            fetch(audioUrl) // 加載音效檔案
+                .then(response => response.arrayBuffer()) // 將音效轉為 ArrayBuffer
+                .then(data => audioContext.decodeAudioData(data)) // 解碼音效數據
+                .then(buffer => {
+                    const source = audioContext.createBufferSource(); // 創建音頻源
+                    source.buffer = buffer; // 設置音效緩衝區
+                    source.connect(audioContext.destination); // 將音頻源連接到輸出（喇叭）
+                    source.start(0); // 播放音效
+                })
+                .catch(error => console.error('Error with Web Audio API:', error)); // 捕捉錯誤
+        }
+
 
         function showHamster() {
             if (GameState.isPaused) return;
@@ -227,18 +240,26 @@
             hole.appendChild(hamster);
 
             hamster.addEventListener('click', () => {
-                if (hamsterType === 'angel') {
-                    GameState.score -= 10;
-                    elements.angelSound.currentTime = 0;
-                    elements.angelSound.play();
-                } else {
-                    GameState.score += 10;
-                    elements.devilSound.currentTime = 0;
-                    elements.devilSound.play();
-                }
-                elements.score.textContent = GameState.score;
-                hamster.remove();
+                 // 添加彈跳效果
+                hamster.classList.add('bouncing');
+            if (hamsterType === 'angel') {
+                GameState.score -= 10;
+                playSoundWithWebAudio('music/angel_music.aiff'); // 播放天使音效
+            } else {
+                GameState.score += 10;
+                playSoundWithWebAudio('music/click.mp3'); // 播放惡魔音效
+            }
+
+           
+
+            // 等待動畫結束後移除鼠鼠
+            hamster.addEventListener('animationend', () => {
+                hamster.remove(); // 移除鼠鼠
             });
+
+            elements.score.textContent = GameState.score;
+        });
+
 
             setTimeout(() => {
                 hamster.style.transform = 'translateY(-70px)';
@@ -248,44 +269,44 @@
 
         // Game control functions
         function startGame() {
-        GameState.score = 0;
-        GameState.timeLeft = 60; // 修改遊戲時間為 60 秒
-        GameState.isPlaying = true;
-        GameState.isPaused = false;
+            GameState.score = 0;
+            GameState.timeLeft = 60; // 修改遊戲時間為 60 秒
+            GameState.isPlaying = true;
+            GameState.isPaused = false;
 
-        elements.backgroundMusic.volume = 0.5;
-        elements.backgroundMusic.currentTime = 0;
-        elements.backgroundMusic.play();
+            elements.backgroundMusic.volume = 0.5;
+            elements.backgroundMusic.currentTime = 0;
+            elements.backgroundMusic.play();
 
-        elements.score.textContent = GameState.score;
-        elements.timer.textContent = GameState.timeLeft;
-        elements.endGameDisplay.style.display = 'none';
-        elements.startButton.style.display = 'none';
-        elements.pauseButton.style.display = 'block';
-        elements.pauseButton.disabled = false;
-        elements.restartButton.style.display = 'none';
+            elements.score.textContent = GameState.score;
+            elements.timer.textContent = GameState.timeLeft;
+            elements.endGameDisplay.style.display = 'none';
+            elements.startButton.style.display = 'none';
+            elements.pauseButton.style.display = 'block';
+            elements.pauseButton.disabled = false;
+            elements.restartButton.style.display = 'none';
 
-        // 設置普通鼠鼠的出現計時器
-        GameState.hamsterInterval = setInterval(showHamster, 600);
+            // 設置普通鼠鼠的出現計時器
+            GameState.hamsterInterval = setInterval(showHamster, 600);
 
-        // 隨機時間觸發 Boss 模式
-        setTimeout(() => {
-            if (GameState.isPlaying) startBossMode();
-        }, randomTime(25000, 40000)); // 10 到 20 秒之間隨機觸發
+            // 隨機時間觸發 Boss 模式
+            setTimeout(() => {
+                if (GameState.isPlaying) startBossMode();
+            }, randomTime(25000, 40000)); // 10 到 20 秒之間隨機觸發
 
-        // 設置遊戲計時器
-        const timerInterval = setInterval(() => {
-            if (!GameState.isPaused) {
-                GameState.timeLeft--;
-                elements.timer.textContent = GameState.timeLeft;
-                if (GameState.timeLeft <= 0) {
-                    clearInterval(GameState.hamsterInterval);
-                    clearInterval(timerInterval);
-                    endGame();
+            // 設置遊戲計時器
+            const timerInterval = setInterval(() => {
+                if (!GameState.isPaused) {
+                    GameState.timeLeft--;
+                    elements.timer.textContent = GameState.timeLeft;
+                    if (GameState.timeLeft <= 0) {
+                        clearInterval(GameState.hamsterInterval);
+                        clearInterval(timerInterval);
+                        endGame();
+                    }
                 }
-            }
-        }, 1000);
-    }
+            }, 1000);
+        }
 
 
 
@@ -344,17 +365,22 @@
 
             hole.appendChild(bossHamster);
 
-            // 點擊時增加分數並播放音效
             bossHamster.addEventListener('click', () => {
+
+                // 添加彈跳效果
+                bossHamster.classList.add('bouncing');
                 GameState.score += 50;
                 elements.score.textContent = GameState.score;
 
-                const bossSound = document.getElementById('boss-sound');
-                bossSound.currentTime = 0;
-                bossSound.play();
+                playSoundWithWebAudio('music/boss_sound.mp3'); // 播放 Boss 音效
 
-                bossHamster.remove();
+
+                // 等待動畫結束後移除 Boss 鼠鼠
+                bossHamster.addEventListener('animationend', () => {
+                    bossHamster.remove();
+                });
             });
+
 
             // 300 毫秒後自動消失
             setTimeout(() => bossHamster.remove(), 400);
