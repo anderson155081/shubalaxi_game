@@ -253,7 +253,7 @@
 .hamster_game_box{
     margin: 0 auto;
     position: relative;
-    height: 100vh;
+    height: 100dvh;
     max-width: 500px;
     width: 100%;
     padding-top: 12vh;
