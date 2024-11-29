@@ -12,42 +12,57 @@
 
  /* 排行榜按鈕與彈出視窗 */
  #leaderboard-button {
-     position: fixed;
-    top: 80px;
-     right: 10px;
-     padding: 10px 20px;
-     background-color: #007bff;
-     color: #fff;
-     border: none;
-     cursor: pointer;
-     font-size: 16px;
-     z-index: 97;
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+z-index: 97;
  }
  #leaderboard {
-     display: none; /* 預設隱藏 */
-     position: fixed;
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
-     background-color: #fff;
-     border: 1px solid #ccc;
-     padding: 20px;
-     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-     width: 300px;
-     z-index: 1000;
-     color: #E69183;
+    display: none; /* 預設隱藏 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 300px;
+    z-index: 1000;
+    color: #E69183;
+    border: 8px solid #E69183;
+    border-radius: 30px;
+ }
+ #leaderboard::before{
+    content: '';
+    position: absolute;
+    background: url(img/foot.png) no-repeat center / 100%;
+    width: 50px;
+    height: 50px;
+    top: -36px;
+    left: 50%;
+    transform: translateX(-50%);
  }
  #leaderboard h2 { margin-top: 0; }
  #leaderboard ul { list-style: none; padding: 0; }
  #leaderboard ul li { margin: 5px 0; font-size: 16px; }
  #close-leaderboard {
-     margin-top: 10px;
-     padding: 5px 10px;
-     background-color: #dc3545;
-     color: #fff;
-     border: none;
-     cursor: pointer;
-     font-size: 14px;
+    position: absolute;
+    cursor: pointer;
+    font-size: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: none;
+    border: 5px solid #E69183;
+    color: #E69183;
+    bottom: -26px;
+    background: #FFF;
  }
 
  /* 遊戲結構和控制樣式 */
@@ -287,13 +302,39 @@ button:active{
 .close-button{
     position: absolute;
     bottom: -25px;
-    left: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0;
+    left: 25%;
+    transform: translateX(-25%);
+}
+#submit-score{
+    position: absolute;
+    bottom: -25px;
+    right: 25%;
+    transform: translateX(25%);
+}
+
+input[type="text"],input[type="text"]:focus, input[type="text"]:focus{
+    width: 65%;
+    height: 36px;
+    border-radius: 18px;
+    border: 3px solid #E69183;
+    padding-left: 12px;
+    font-family: 'SweiGothicCJKtc-bold', sans-serif;
+    color: #E69183!important;
+}
+input::placeholder{
+    font-family: 'SweiGothicCJKtc-bold', sans-serif;
+    color: #ffd6d0;
+}
+.body_mask{
+    display: block;
 }
 
 .hide{
     display: none;
+}
+
+.hint_text{
+    font-size: 9px;
 }
 
 
