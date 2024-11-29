@@ -347,7 +347,7 @@ button:active{
 #controls{
     display: flex;
     justify-content: space-around;
-    margin: 16px auto;
+    margin: 32px auto 16px;
     max-width: 350px;
 }
 
