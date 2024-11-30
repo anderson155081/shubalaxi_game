@@ -169,6 +169,14 @@
     </script>
 
     <script>
+         document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) {
+                event.preventDefault(); // 阻止缩放
+            }
+        }, { passive: false });
+    </script>
+
+    <script>
         // Game logic
         const GameState = {
             score: 0,
