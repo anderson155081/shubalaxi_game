@@ -81,13 +81,13 @@
     <audio id="devil-sound" src="music/click.mov"  preload="auto"></audio>
     <audio id="angel-sound" src="music/angel_music.aiff"  preload="auto"></audio>
     <audio id="boss-music" src="music/boss_music.mp3"  preload="auto" loop></audio>
-    <audio id="boss-sound" src="music/boss_sound.mov"  preload="auto"></audio>
+    <audio id="boss-sound" src="music/boss_sound.mp3"  preload="auto"></audio>
 
 
     <!-- Firebase SDK -->
     <script type="module">
         document.addEventListener("DOMContentLoaded", function() {
-            preloadAudio('music/boss_sound.mov');
+            preloadAudio('music/boss_sound.mp3');
             preloadAudio('music/angel_music.aiff');
             preloadAudio('music/click.mp3');
             preloadAudio('music/background_music.wav'); // 背景音乐
@@ -369,7 +369,7 @@
                 GameState.score += 50;
                 elements.score.textContent = GameState.score;
                 bossHamster.remove();
-                playSoundWithWebAudio('music/boss_sound.mov'); // 播放 Boss 音效
+                playSoundWithWebAudio('music/boss_sound.mp3'); // 播放 Boss 音效
             });
 
             // 300 毫秒後自動消失
