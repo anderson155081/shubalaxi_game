@@ -469,6 +469,7 @@ input::placeholder{
     position: absolute;
     bottom: 0px;
     left: 5px;
+    z-index: 2;
 
 }
 
@@ -504,19 +505,3 @@ body.keyboard-open {
     width: 100%;
 }
 
-/* 彈跳 */
-@keyframes bounce-down {
-    0% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(5px); /* 向下移動 20px */
-    }
-    100% {
-        transform: translateY(0); /* 返回原位 */
-    }
-}
-
-.hamster.bouncing {
-    animation: bounce-down 0.2s ease-in-out; /* 動畫持續 0.3 秒 */
-}
