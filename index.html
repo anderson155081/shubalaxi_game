@@ -373,9 +373,9 @@
             bossHamster.addEventListener('click', () => {
                 GameState.score += 50;
                 elements.score.textContent = GameState.score;
-
-                playSoundWithWebAudio('music/boss_sound.mp3'); // 播放 Boss 音效
                 bossHamster.remove();
+                playSoundWithWebAudio('music/boss_sound.mp3'); // 播放 Boss 音效
+               
 
                 
             });
