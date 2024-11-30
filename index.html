@@ -297,7 +297,7 @@
             // 隨機時間觸發 Boss 模式
             setTimeout(() => {
                 if (GameState.isPlaying) startBossMode();
-            }, randomTime(25000, 40000)); // 10 到 20 秒之間隨機觸發
+            }, randomTime(25000, 30000)); // 10 到 20 秒之間隨機觸發
 
             // 設置遊戲計時器
             const timerInterval = setInterval(() => {
@@ -364,7 +364,7 @@
         const bossInterval = setInterval(() => {
             const hole = randomHole();
             const bossHamster = document.createElement('img');
-            bossHamster.src = 'img/boss.png';
+            bossHamster.src = 'img/boss2.png';
             bossHamster.classList.add('hamster', 'boss');
             bossHamster.style.display = 'block';
 
@@ -382,7 +382,7 @@
 
 
             // 300 毫秒後自動消失
-            setTimeout(() => bossHamster.remove(), 500);
+            setTimeout(() => bossHamster.remove(), 600);
         }, 200); // 每 200 毫秒生成一隻
 
         // Boss 模式持續 15 秒

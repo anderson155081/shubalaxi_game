@@ -463,13 +463,14 @@ input::placeholder{
 
 /* boss */
 .hamster.boss {
-    width: 80px;
-    height: 80px;
+    width: 85px;
+    height: 85px;
     animation: shake 0.3s infinite;
     position: absolute;
-    bottom: 0px;
+    bottom: 10px;
     left: 5px;
     z-index: 2;
+    transition: none;
 
 }
 
