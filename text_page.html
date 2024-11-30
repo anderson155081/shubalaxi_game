@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="reset.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="preload" href="img/boss.png" as="image">
-    
 
     <!-- Rubik字體 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -71,28 +70,20 @@
             </div>
         </div>
     </div>
+
     <!-- boss警示訊息 -->
     <div id="boss-alert" class="alert hidden">
         <p>警告！隱藏Boss鼠鼠即將來襲！<br>擊中+50分</p>
     </div>
     
     <!-- Audio elements -->
-    <audio id="background-music" src="music/background_music.wav" loop></audio>
-    <audio id="devil-sound" src="music/click.mov"  preload="auto"></audio>
-    <audio id="angel-sound" src="music/angel_music.aiff"  preload="auto"></audio>
-    <audio id="boss-music" src="music/boss_music.mp3"  preload="auto" loop></audio>
-    <audio id="boss-sound" src="music/boss_sound.mp3"  preload="auto"></audio>
+    <audio id="background-music" src="music/background_music.wav" loop preload="auto"></audio>
+    <audio id="devil-sound" src="music/click.mov" preload="auto"></audio>
+    <audio id="angel-sound" src="music/angel_music.aiff" preload="auto"></audio>
+    <audio id="boss-music" src="music/boss_music.mp3" preload="auto" loop></audio>
+    <audio id="boss-sound" src="music/boss_sound.mp3" preload="auto"></audio>
 
-
-    <!-- Firebase SDK -->
     <script type="module">
-        document.addEventListener("DOMContentLoaded", function() {
-            preloadAudio('music/boss_sound.mp3');
-            preloadAudio('music/angel_music.aiff');
-            preloadAudio('music/click.mp3');
-            preloadAudio('music/background_music.wav'); // 背景音乐
-        });
-
         // Firebase configuration and initialization
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
         import { getDatabase, ref, set, push, onValue, get, query, orderByChild } 
@@ -111,37 +102,36 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+        // 提交玩家分数到Firebase
         window.submitScoreToFirebase = async (username, score) => {
             const scoresRef = ref(db, `leaderboard/${username}`);
             try {
-                // 嘗試先獲取現有數據
+                // 尝试先获取现有数据
                 const snapshot = await get(scoresRef);
                 const currentData = snapshot.val();
 
-                // 判斷是否需要更新分數
+                // 判断是否需要更新分数
                 if (currentData && currentData.score >= score) {
-                console.log(`New score (${score}) is not higher than the current score (${currentData.score})`);
-                alert("新分數未超過目前最高分，未更新！");
-                return;
+                    console.log(`New score (${score}) is not higher than the current score (${currentData.score})`);
+                    alert("新分數未超過目前最高分，未更新！");
+                    return;
                 }
 
-                // 更新分數（首次或新分數更高時）
+                // 更新分数（首次或新分数更高时）
                 await set(scoresRef, {
-                name: username,
-                score: score,
-                timestamp: Date.now(),
+                    name: username,
+                    score: score,
+                    timestamp: Date.now(),
                 });
 
                 console.log(`Score updated for ${username}`);
             } catch (error) {
                 console.error("Error submitting score:", error);
-                alert("提交分數時發生錯誤，請稍後再試");
+                alert("提交分数时发生错误，请稍后再试");
             }
         };
 
-
-
-
+        // 获取排行榜数据并显示
         window.fetchLeaderboardData = (callback) => {
             const scoresRef = ref(db, 'leaderboard');
             onValue(scoresRef, (snapshot) => {
@@ -151,12 +141,12 @@
                     return;
                 }
 
-                // 將物件轉為陣列並排序
+                // 将对象转为数组并排序
                 const scoresArray = Object.keys(data).map((key) => ({
                     name: key,
                     score: data[key].score,
                     timestamp: data[key].timestamp
-                })).sort((a, b) => b.score - a.score); // 按分數降序排序
+                })).sort((a, b) => b.score - a.score); // 按分数降序排序
 
                 callback(scoresArray);
             }, (error) => {
@@ -164,12 +154,10 @@
                 callback([]);
             });
         };
-
-
     </script>
 
     <script>
-        // Game logic
+        // 初始化游戏状态
         const GameState = {
             score: 0,
             timeLeft: 60,
@@ -177,7 +165,6 @@
             isPaused: false
         };
 
-        // DOM Elements
         const elements = {
             timer: document.getElementById('timer'),
             score: document.getElementById('score'),
@@ -197,7 +184,7 @@
             angelSound: document.getElementById('angel-sound')
         };
 
-        // Initialize game holes
+        // 初始化游戏洞
         function initializeHoles() {
             elements.gameContainer.innerHTML = '';
             for (let i = 1; i <= 9; i++) {
@@ -209,93 +196,32 @@
             }
         }
 
-        // Game functions
-        function randomTime(min, max) {
-            return Math.round(Math.random() * (max - min) + min);
-        }
-
-        function randomHole() {
-            const holes = document.querySelectorAll('.hole');
-            return holes[Math.floor(Math.random() * holes.length)];
-        }
-
-        // Audio API
-        function playSoundWithWebAudio(audioUrl) {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)(); // 創建音頻上下文
-            fetch(audioUrl) // 加載音效檔案
-                .then(response => response.arrayBuffer()) // 將音效轉為 ArrayBuffer
-                .then(data => audioContext.decodeAudioData(data)) // 解碼音效數據
-                .then(buffer => {
-                    const source = audioContext.createBufferSource(); // 創建音頻源
-                    source.buffer = buffer; // 設置音效緩衝區
-                    source.connect(audioContext.destination); // 將音頻源連接到輸出（喇叭）
-                    source.start(0); // 播放音效
-                })
-                .catch(error => console.error('Error with Web Audio API:', error)); // 捕捉錯誤
-        }
-
-
-        function showHamster() {
-            if (GameState.isPaused) return;
-
-            const hole = randomHole();
-            const hamsterType = Math.random() < 0.5 ? 'angel' : 'devil';
-            const hamster = document.createElement('img');
-
-            hamster.src = hamsterType === 'angel' ? 'img/pinky.png' : 'img/chuchi.png';
-            hamster.classList.add('hamster', hamsterType);
-            hamster.style.display = 'block';
-            
-            hole.appendChild(hamster);
-
-            hamster.addEventListener('click', () => {
-            if (hamsterType === 'angel') {
-                GameState.score -= 10;
-                playSoundWithWebAudio('music/angel_music.aiff'); // 播放天使音效
-            } else {
-                GameState.score += 10;
-                playSoundWithWebAudio('music/click.mp3'); // 播放惡魔音效
-            }
-            hamster.remove(); // 移除鼠鼠
-
-            elements.score.textContent = GameState.score;
-        });
-
-
-            setTimeout(() => {
-                hamster.style.transform = 'translateY(-70px)';
-                setTimeout(() => hamster.remove(), 1200);
-            }, randomTime(1000, 2000));
-        }
-
-        // Game control functions
         function startGame() {
+            // 游戏开始时初始化分数、时间、UI元素
             GameState.score = 0;
-            GameState.timeLeft = 60; // 修改遊戲時間為 60 秒
+            GameState.timeLeft = 60;
             GameState.isPlaying = true;
             GameState.isPaused = false;
 
-            elements.backgroundMusic.volume = 0.5;
+            // 让背景音乐播放
             elements.backgroundMusic.currentTime = 0;
             elements.backgroundMusic.play();
-
             elements.score.textContent = GameState.score;
             elements.timer.textContent = GameState.timeLeft;
-            elements.endGameDisplay.style.display = 'none';
+
+            // 显示暂停按钮并隐藏开始按钮
             elements.startButton.style.display = 'none';
             elements.pauseButton.style.display = 'block';
             elements.pauseButton.disabled = false;
-            elements.restartButton.style.display = 'none';
+            
+            // 设置普通鼠标的出现计时器
+            GameState.hamsterInterval = setInterval(() => showHamster('normal'), 600);
 
-            // 設置普通鼠鼠的出現計時器
-            GameState.hamsterInterval = setInterval(showHamster, 600);
-
-            // 隨機時間觸發 Boss 模式
             setTimeout(() => {
-                if (GameState.isPlaying) startBossMode();
-            }, randomTime(25000, 40000)); // 10 到 20 秒之間隨機觸發
+                if (GameState.isPlaying) startBossMode(); // Boss模式固定30秒触发
+            }, 30000); // Boss模式在30秒后触发
 
-            // 設置遊戲計時器
+            // 设置游戏计时器
             const timerInterval = setInterval(() => {
                 if (!GameState.isPaused) {
                     GameState.timeLeft--;
@@ -309,15 +235,53 @@
             }, 1000);
         }
 
+        function showHamster(type) {
+            const hole = randomHole();
+            const hamster = document.createElement('img');
+            hamster.src = type === 'boss' ? 'img/boss.png' : (Math.random() < 0.5 ? 'img/pinky.png' : 'img/chuchi.png');
+            hamster.classList.add('hamster', type === 'boss' ? 'boss' : 'normal');
+            hole.appendChild(hamster);
 
+            hamster.addEventListener('click', () => {
+                if (type === 'boss') {
+                    GameState.score += 50;
+                    playCachedAudio('music/boss_sound.mp3');
+                } else if (hamster.src.includes('pinky')) {
+                    GameState.score -= 10;
+                    playCachedAudio('music/angel_music.aiff');
+                } else {
+                    GameState.score += 10;
+                    playCachedAudio('music/click.mov');
+                }
+                elements.score.textContent = GameState.score;
+                hamster.remove();
+            });
+
+            setTimeout(() => hamster.remove(), 1200);
+        }
+
+        function startBossMode() {
+            clearInterval(GameState.hamsterInterval); // 停止普通鼠鼠的生成
+
+            elements.backgroundMusic.pause(); // 暂停普通背景音乐
+            playCachedAudio('music/boss_music.mp3'); // 播放Boss背景音乐
+
+            const bossInterval = setInterval(() => {
+                showHamster('boss'); // 生成Boss鼠鼠
+            }, 200);
+
+            setTimeout(() => {
+                clearInterval(bossInterval); // 停止Boss生成
+                elements.backgroundMusic.play(); // 恢复普通背景音乐
+                GameState.hamsterInterval = setInterval(() => showHamster('normal'), 600); // 恢复普通鼠鼠生成
+            }, 15000); // Boss模式持续15秒
+        }
 
         function pauseGame() {
             GameState.isPaused = !GameState.isPaused;
             elements.pauseButton.textContent = GameState.isPaused ? "繼續遊戲" : "暫停遊戲";
-
             if (GameState.isPaused) {
                 elements.backgroundMusic.pause();
-                document.querySelectorAll('.hamster').forEach(hamster => hamster.remove());
             } else {
                 elements.backgroundMusic.play();
             }
@@ -326,209 +290,22 @@
         function endGame() {
             GameState.isPlaying = false;
             elements.backgroundMusic.pause();
-            elements.backgroundMusic.currentTime = 0;
-
-            document.querySelectorAll('.hamster').forEach(hamster => hamster.remove());
             elements.finalScore.textContent = GameState.score;
             elements.endGameDisplay.style.display = 'block';
-            elements.pauseButton.style.display = 'none';
-            elements.restartButton.style.display = 'block';
         }
 
-        // boss模式
-        function startBossMode() {
-        if (GameState.isPaused || !GameState.isPlaying) return;
+        function randomHole() {
+            const holes = document.querySelectorAll('.hole');
+            return holes[Math.floor(Math.random() * holes.length)];
+        }
 
-        // 顯示警示訊息
-        const bossAlert = document.getElementById('boss-alert');
-        bossAlert.classList.remove('hidden');
-
-        // 2 秒後隱藏警示訊息並啟動 Boss 模式
-        setTimeout(() => {
-            bossAlert.classList.add('hidden');
-
-            // 切換到 Boss 音樂
-            elements.backgroundMusic.pause();
-            const bossMusic = document.getElementById('boss-music');
-            bossMusic.currentTime = 0;
-            bossMusic.play();
-
-            // 停止普通鼠鼠的生成
-            clearInterval(GameState.hamsterInterval);
-
-        // 設置 Boss 鼠鼠快速生成和消失的邏輯
-        const bossInterval = setInterval(() => {
-            const hole = randomHole();
-            const bossHamster = document.createElement('img');
-            bossHamster.src = 'img/boss.png';
-            bossHamster.classList.add('hamster', 'boss');
-            bossHamster.style.display = 'block';
-
-            hole.appendChild(bossHamster);
-
-            bossHamster.addEventListener('click', () => {
-                if (!bossHamster.classList.contains('clicked')) {
-                    bossHamster.classList.add('clicked'); // 标记已点击
-                    GameState.score += 50; // 加分
-                    elements.score.textContent = GameState.score;
-
-                    playSoundWithWebAudio('music/boss_sound.mp3'); // 播放音效
-
-                    bossHamster.remove();
-                }
-            });
-
-
-            // 300 毫秒後自動消失
-            setTimeout(() => bossHamster.remove(), 500);
-        }, 200); // 每 200 毫秒生成一隻
-
-        // Boss 模式持續 15 秒
-        setTimeout(() => {
-            clearInterval(bossInterval);
-            bossMusic.pause();
-            bossMusic.currentTime = 0;
-            elements.backgroundMusic.play(); // 恢復背景音樂
-
-            // 恢復普通鼠鼠的生成
-            GameState.hamsterInterval = setInterval(showHamster, 300);
-        }, 15000); // Boss 模式持續 15 秒
-    }, 2000); // 警示訊息顯示 2 秒後啟動 Boss 模式
-}
-
-
-
-
-        // Event listeners
+        // 按钮事件监听器
         elements.startButton.addEventListener('click', startGame);
         elements.pauseButton.addEventListener('click', pauseGame);
         elements.restartButton.addEventListener('click', startGame);
-        elements.leaderboardButton.addEventListener('click', () => {
-            const mask = document.getElementById('mask_bg'); // 獲取遮罩層
-            elements.leaderboard.style.display =
-                elements.leaderboard.style.display === 'none' ? 'block' : 'none';
 
-            if (elements.leaderboard.style.display === 'block') {
-                mask.style.display = 'block';
-                fetchLeaderboardData((scores) => {
-                    const leaderboardList = document.getElementById('leaderboard-list');
-                    leaderboardList.innerHTML = '';  // 清空現有的排行榜
-
-                    // 遍歷排行榜數據，最多顯示前5名
-                    scores.slice(0, 10).forEach((entry, index) => {
-                        const li = document.createElement('li');
-                        
-                        // 創建排名 span
-                        const rankSpan = document.createElement('span');
-                        rankSpan.className = 'rank';
-                        rankSpan.textContent = `${index + 1}`;
-
-                        // 創建名稱 span
-                        const nameSpan = document.createElement('span');
-                        nameSpan.className = 'name';
-                        nameSpan.textContent = entry.name;
-
-                        // 創建分數 span
-                        const scoreSpan = document.createElement('span');
-                        scoreSpan.className = 'score';
-                        scoreSpan.textContent = `${entry.score}`;
-
-                        // 將所有的 span 元素添加到 li 裡
-                        li.appendChild(rankSpan);
-                        li.appendChild(nameSpan);
-                        li.appendChild(scoreSpan);
-
-                        // 將 li 添加到排行榜列表中
-                        leaderboardList.appendChild(li);
-                    });
-                });
-            } 
-        });
-
-
-        elements.closeLeaderboard.addEventListener('click', () => {
-            const mask = document.getElementById('mask_bg'); // 獲取遮罩層
-            elements.leaderboard.style.display = 'none';
-            mask.style.display = 'none';
-        });
-
-        elements.submitScoreButton.addEventListener('click', async () => {
-            const username = document.getElementById('username').value;
-            if (username) {
-                await submitScoreToFirebase(username, GameState.score);
-                alert(`已提交分數！玩家：${username}，分數：${GameState.score}`);
-                elements.endGameDisplay.style.display = 'none';
-                elements.leaderboard.style.display = 'block';
-                fetchLeaderboardData((scores) => {
-                    const leaderboardList = document.getElementById('leaderboard-list');
-                    leaderboardList.innerHTML = '';
-                    scores.slice(0, 10).forEach((entry, index) => {
-                        // 創建 li 元素
-                        const li = document.createElement('li');
-
-                        // 創建 span 包裹排名
-                        const rankSpan = document.createElement('span');
-                        rankSpan.className = 'rank'; // 可選的 class，用於樣式
-                        rankSpan.textContent = `${index + 1} `;
-
-                        // 創建 span 包裹名字
-                        const nameSpan = document.createElement('span');
-                        nameSpan.className = 'name'; // 可選的 class，用於樣式
-                        nameSpan.textContent = entry.name;
-
-                        // 創建 span 包裹分數
-                        const scoreSpan = document.createElement('span');
-                        scoreSpan.className = 'score'; // 可選的 class，用於樣式
-                        scoreSpan.textContent = `${entry.score}`;
-
-                        // 將 span 添加到 li
-                        li.appendChild(rankSpan);
-                        li.appendChild(nameSpan);
-                        li.appendChild(scoreSpan);
-
-                        // 添加到排行榜列表
-                        leaderboardList.appendChild(li);
-                    });
-                });
-            }
-        });
-
-
-        elements.closeButton.addEventListener('click', () => {
-            elements.endGameDisplay.style.display = 'none';
-        });
-
-        // Set up cursor
-        const defaultCursor = "url('img/hit.png') 16 16, auto";
-        const clickedCursor = "url('img/hit2.png') 16 16, auto";
-
-        document.body.style.cursor = defaultCursor;
-        
-        document.addEventListener('click', () => {
-            document.body.style.cursor = clickedCursor;
-            setTimeout(() => {
-                document.body.style.cursor = defaultCursor;
-            }, 100);
-        });
-
-        // Initialize game
+        // 初始化游戏洞
         initializeHoles();
-    </script>
-    <script>
-        let initialViewportHeight = window.innerHeight;
-
-        window.addEventListener('resize', () => {
-            const currentViewportHeight = window.innerHeight;
-
-            if (currentViewportHeight < initialViewportHeight) {
-                // 鍵盤彈出
-                document.body.classList.add('keyboard-open');
-            } else {
-                // 鍵盤收起
-                document.body.classList.remove('keyboard-open');
-            }
-        });
-
     </script>
 </body>
 </html>
