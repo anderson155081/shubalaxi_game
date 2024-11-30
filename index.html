@@ -249,8 +249,7 @@
             hole.appendChild(hamster);
 
             hamster.addEventListener('click', () => {
-                 // 添加彈跳效果
-                hamster.classList.add('bouncing');
+             
             if (hamsterType === 'angel') {
                 GameState.score -= 10;
                 playSoundWithWebAudio('music/angel_music.aiff'); // 播放天使音效
@@ -258,13 +257,10 @@
                 GameState.score += 10;
                 playSoundWithWebAudio('music/click.mp3'); // 播放惡魔音效
             }
-
+            hamster.remove(); // 移除鼠鼠
            
 
-            // 等待動畫結束後移除鼠鼠
-            hamster.addEventListener('animationend', () => {
-                hamster.remove(); // 移除鼠鼠
-            });
+            
 
             elements.score.textContent = GameState.score;
         });
@@ -376,18 +372,14 @@
 
             bossHamster.addEventListener('click', () => {
 
-                // 添加彈跳效果
-                bossHamster.classList.add('bouncing');
+                
                 GameState.score += 50;
                 elements.score.textContent = GameState.score;
 
                 playSoundWithWebAudio('music/boss_sound.mp3'); // 播放 Boss 音效
+                bossHamster.remove();
 
-
-                // 等待動畫結束後移除 Boss 鼠鼠
-                bossHamster.addEventListener('animationend', () => {
-                    bossHamster.remove();
-                });
+                
             });
 
 
