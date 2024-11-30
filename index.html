@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <p class="version">測試版本1.0.1</p>
+    <p class="version">測試版本1.0.2</p>
     <div class="hamster_game_box">
         <button id="leaderboard-button">排行榜</button>
         <div id="mask_bg"></div>
@@ -261,7 +261,9 @@
 
             hole.appendChild(hamster);
 
-            hamster.addEventListener('click', (event) => {
+            function handleHamsterClick(event) {
+                event.preventDefault(); // 防止默認觸摸事件
+
                 // 防止同一隻鼠鼠重複點擊
                 if (hamster.dataset.clicked) return;
                 hamster.dataset.clicked = 'true';
@@ -274,14 +276,14 @@
                     playSoundWithWebAudio('music/click.mp3');
                 }
 
-                // 淡出效果，而不是立即移除
-                hamster.style.opacity = '0.5';
-                setTimeout(() => {
-                    hamster.remove();
-                }, 200);
+                // 立即移除，不使用淡出效果
+                hamster.remove();
 
                 elements.score.textContent = GameState.score;
-            });
+            }
+
+            hamster.addEventListener('click', handleHamsterClick);
+            hamster.addEventListener('touchstart', handleHamsterClick);
 
             setTimeout(() => {
                 hamster.style.transform = 'translateY(-70px)';
@@ -293,7 +295,6 @@
                 }, 1200);
             }, randomTime(1000, 2000));
         }
-
         // Game control functions
         function startGame() {
             GameState.score = 0;
@@ -319,7 +320,7 @@
             // 隨機時間觸發 Boss 模式
             setTimeout(() => {
                 if (GameState.isPlaying) startBossMode();
-            }, randomTime(25000, 30000));
+            }, 30000);
 
             // 設置遊戲計時器
             const timerInterval = setInterval(() => {
@@ -380,58 +381,64 @@
                 // 停止普通鼠鼠的生成
                 clearInterval(GameState.hamsterInterval);
 
-                // 設置 Boss 鼠鼠快速生成和消失的邏輯
+                // 同時在多個洞口生成 Boss
                 const bossInterval = setInterval(() => {
-                    const hole = randomHole();
-                    const bossHamster = document.createElement('img');
-                    bossHamster.src = 'img/boss2.png';
-                    bossHamster.classList.add('hamster', 'boss');
-                    bossHamster.style.display = 'block';
+                    // 隨機選擇 2-3 個洞口
+                    const holes = document.querySelectorAll('.hole');
+                    const selectedHoles = Array.from(holes)
+                        .sort(() => 0.5 - Math.random())
+                        .slice(0, Math.floor(Math.random() * 2) + 2);
 
-                    // 新增唯一標識符
-                    const uniqueId = Date.now() + Math.random();
-                    bossHamster.dataset.id = uniqueId;
+                    selectedHoles.forEach(hole => {
+                        const bossHamster = document.createElement('img');
+                        bossHamster.src = 'img/boss2.png';
+                        bossHamster.classList.add('hamster', 'boss');
+                        bossHamster.style.display = 'block';
 
-                    bossHamster.addEventListener('click', (event) => {
-                        // 防止同一隻鼠鼠重複點擊
-                        if (bossHamster.dataset.clicked) return;
-                        bossHamster.dataset.clicked = 'true';
+                        // 使用 touchstart 和 click 事件確保跨平台
+                        const handleClick = (event) => {
+                            event.preventDefault(); // 防止默認觸摸事件
 
-                        GameState.score += 50;
-                        elements.score.textContent = GameState.score;
+                            // 確保只處理一次點擊
+                            if (bossHamster.dataset.clicked) return;
+                            bossHamster.dataset.clicked = 'true';
 
-                        // 淡出效果，而不是立即移除
-                        bossHamster.style.opacity = '0.5';
+                            GameState.score += 50;
+                            elements.score.textContent = GameState.score;
+
+                            // 立即移除，不使用淡出效果
+                            bossHamster.remove();
+
+                            playSoundWithWebAudio('music/boss_sound.mp3');
+                        };
+
+                        // 同時添加兩種事件監聽
+                        bossHamster.addEventListener('click', handleClick);
+                        bossHamster.addEventListener('touchstart', handleClick);
+
+                        hole.appendChild(bossHamster);
+
+                        // 調整移除邏輯，Boss 會更快消失
                         setTimeout(() => {
-                            bossHamster.remove();
-                        }, 200);
-
-                        playSoundWithWebAudio('music/boss_sound.mp3');
+                            if (bossHamster.parentNode) {
+                                bossHamster.remove();
+                            }
+                        }, 500);
                     });
+                }, 300); // 縮短生成間隔，增加難度
 
-                    hole.appendChild(bossHamster);
-
-                    // 調整移除邏輯
-                    setTimeout(() => {
-                        if (!bossHamster.dataset.clicked) {
-                            bossHamster.remove();
-                        }
-                    }, 600);
-                }, 200);
-
-                // Boss 模式持續 15 秒
+                // Boss 模式持續時間
                 setTimeout(() => {
                     clearInterval(bossInterval);
                     bossMusic.pause();
                     bossMusic.currentTime = 0;
-                    elements.backgroundMusic.play(); // 恢復背景音樂
+                    elements.backgroundMusic.play();
 
                     // 恢復普通鼠鼠的生成
                     GameState.hamsterInterval = setInterval(showHamster, 300);
                 }, 15000);
             }, 2000);
         }
-
         // Event listeners
         elements.startButton.addEventListener('click', startGame);
         elements.pauseButton.addEventListener('click', pauseGame);
