@@ -204,7 +204,6 @@
                 const hole = document.createElement('div');
                 hole.className = 'hole';
                 hole.dataset.index = i;
-                hole.innerHTML = '<div class="area_setting"></div>';
                 elements.gameContainer.appendChild(hole);
             }
         }
@@ -258,10 +257,6 @@
                 playSoundWithWebAudio('music/click.mp3'); // 播放惡魔音效
             }
             hamster.remove(); // 移除鼠鼠
-           
-
-            
-
             elements.score.textContent = GameState.score;
         });
 
@@ -375,11 +370,7 @@
                 elements.score.textContent = GameState.score;
                 bossHamster.remove();
                 playSoundWithWebAudio('music/boss_sound.mov'); // 播放 Boss 音效
-               
-
-                
             });
-
 
             // 300 毫秒後自動消失
             setTimeout(() => bossHamster.remove(), 600);
